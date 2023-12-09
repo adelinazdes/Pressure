@@ -34,11 +34,11 @@ struct pipe
 };
 
 
-void pressure(struct pipe myPipe) {
+double pressure(struct pipe myPipe) {
     double  p_0;
  p_0 = (myPipe.p_L / (myPipe.ro * M_G) - myPipe.z_0 + myPipe.z_L + myPipe.lambda * (myPipe.L / myPipe.D) * pow(myPipe.V, 2) / (2 * M_G)) * (myPipe.ro * M_G);
-
-    cout << "Результат: p_0 = " << p_0 << " Па";
+    
+ return p_0;
     }
 
 int main()
@@ -61,13 +61,14 @@ int main()
 
 
     myPipe.D = myPipe.D_vnesh - 2 * myPipe.b;
-    double Q = myPipe.Q / 3600; //перевод в м3/с
-    myPipe.V = 4 * Q / (3.14 * pow(myPipe.D, 2));
+    double Q = myPipe.Q / 3600;                     //перевод в м3/с
+    myPipe.V = 4 * Q / (3.14 * pow(myPipe.D, 2));      //вычисляем скорость нефти 
    
     Re = myPipe.V* myPipe.D/ myPipe.u;
-    double relative_roughness = myPipe.abc/myPipe.D;
+    double relative_roughness = myPipe.abc/myPipe.D;    //вычисляем относ.шероховатость
     myPipe.lambda = hydraulic_resistance_isaev(Re, relative_roughness);
    
-    pressure(myPipe);
+    double p_0 = pressure(myPipe);   //присваиваем значения из функции pressure
+    cout << "Результат: p_0 = " << p_0 << " Па";
 
 }
